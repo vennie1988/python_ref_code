@@ -182,3 +182,89 @@ a.items() & b.items() # {('y', 2)}
 # Make a new dictionary with certain keys removed
 c = {key:a[key] for key in a.key() - {'z', 'w'}}
 # c is {'x': 1, 'y': 2}
+
+
+"""
+Removing Duplicates from a sequence while maintaining order
+"""
+# for hashable sequence
+def dedupe(items):
+	seen = set()
+	for item in items:
+		if item not in seen:
+			yield item
+			seen.add(item)
+
+#for not hashable sequence
+def dedupe(items, key=None):
+	seen = set()
+	for item in items:
+		val = item if key is None else key(item)
+		if val not in seen:
+			yield item
+			seen.add(val)
+
+#usage
+a = [{'x':1, 'y':2}, {'x':1, 'y':3}]
+list(dedupe(a, key=lambda d: (d['x'],d['y'])))
+list(dedupe(a, key=lambda d: d['x']))
+
+#simple usage
+a = [1, 5, 2, 1, 9, 1]
+set(a)
+
+#eliminate duplicate lines
+with open(somefile, 'r') as f:
+	for line in dedupe(f):
+		...
+
+"""
+Naming a slice
+"""
+items = [0, 1, 2, 3, 4, 5, 6]
+a = slice(2, 4)
+#items[2:4] == items[a]
+items[a] = [10, 11]
+#items = [0, 1, 10, 11, 4, 5, 6]
+del items[a]
+#items = [0, 1, 4, 5, 6]
+#other usage
+a = slice(10, 50, 2)
+a.start
+a.stop
+a.step
+
+
+"""
+Determing the most frequently occuring items in a sequence
+using collections.Counter Class
+"""
+words = [
+     'look', 'into', "look", 'under'
+]
+
+from collections import Counter
+word_counts = Counter(words)
+top_three = word_counts.most_common(3)
+print(top_three)
+#output [('look', 3), ('into', 1), ('under', 1)]
+word_counts['look']
+
+#increment the count manually, simply use addtion or update() method
+morewords = ['why', 'are', 'you']
+for word in morewords:
+	word_counts[word] += 1
+#or
+word_counts.update(morewords)
+
+#Counter instance can be easily combined using various mathematical operations
+a = Counter(words)
+b = counter(morewords)
+#Combine counts
+c = a + b
+#subtract counts
+d = a - b
+
+"""
+Sorting a list of Dictionaries by a common key
+"""
